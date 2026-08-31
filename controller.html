@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>APEX Control</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #050505;
+    color: #ddd;
+    font-family: "Courier New", monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.panel {
+    width: 90%;
+    max-width: 650px;
+    padding: 35px;
+    background: #0c0c0c;
+    border: 1px solid #333;
+}
+
+h1 {
+    letter-spacing: 5px;
+    margin: 0 0 30px;
+}
+
+.status {
+    padding: 20px;
+    border: 1px solid #333;
+    margin-bottom: 25px;
+    line-height: 2;
+}
+
+.online {
+    color: #71ff71;
+}
+
+button {
+    width: 100%;
+    padding: 17px;
+    margin: 5px 0;
+    background: #111;
+    color: #ddd;
+    border: 1px solid #444;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #222;
+}
+
+input {
+    width: 100%;
+    padding: 15px;
+    margin: 8px 0;
+    background: #050505;
+    color: white;
+    border: 1px solid #444;
+    font-family: inherit;
+}
+
+.reset {
+    margin-top: 25px;
+    color: #ff6666;
+    border-color: #633;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="panel">
+
+<h1>APEX CONTROL</h1>
+
+<div class="status">
+
+PLAYER TERMINAL:
+<span class="online">● ONLINE</span>
+
+<br>
+
+CURRENT STATE:
+<strong id="state">SYSTEM DOWN</strong>
+
+</div>
+
+<button id="scanButton">
+INITIATE SCAN
+</button>
+
+<button id="secretButton">
+UNLOCK SECRET LEVEL
+</button>
+
+<label>PORT NUMBER</label>
+
+<input id="portInput" value="8080">
+
+<button id="portButton">
+UPDATE PORT
+</button>
+
+<button id="resetButton" class="reset">
+RESET PLAYER
+</button>
+
+</div>
+
+<script type="module" src="controller.js"></script>
+
+</body>
+</html>

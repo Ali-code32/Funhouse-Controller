@@ -1,0 +1,819 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #020506;
+    color: #d8ffff;
+    font-family: "Courier New", monospace;
+}
+
+body {
+    position: relative;
+}
+
+.crt {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.025) 0px,
+        rgba(255,255,255,0.025) 1px,
+        transparent 1px,
+        transparent 4px
+    );
+}
+
+.vignette {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    pointer-events: none;
+    background: radial-gradient(
+        ellipse at center,
+        transparent 45%,
+        rgba(0,0,0,.75) 100%
+    );
+}
+
+.player-interface,
+.secret-interface {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    background:
+        radial-gradient(
+            circle at center,
+            #0a1c1e 0%,
+            #041012 40%,
+            #010304 100%
+        );
+}
+
+.topbar {
+    height: 65px;
+    border-bottom: 1px solid rgba(100,220,220,.2);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    padding: 0 35px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    opacity: .8;
+}
+
+.topbar div:nth-child(2) {
+    text-align: center;
+}
+
+.topbar div:last-child {
+    text-align: right;
+}
+
+main {
+    height: calc(100vh - 120px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.screen {
+    width: 850px;
+    max-width: 90%;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.system-id {
+    font-size: 10px;
+    letter-spacing: 3px;
+    opacity: .45;
+    margin-bottom: 25px;
+}
+
+.failure-title {
+    display: flex;
+    gap: 20px;
+    font-size: 58px;
+    font-weight: bold;
+    letter-spacing: 8px;
+}
+
+.failure-title .glitch {
+    animation: glitch 2.5s infinite;
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    background: rgba(120,240,240,.3);
+    margin: 25px 0;
+}
+
+.diagnostics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.diagnostic {
+    border: 1px solid rgba(120,240,240,.15);
+    padding: 15px;
+    background: rgba(0,0,0,.25);
+}
+
+.diagnostic span {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 1px;
+    opacity: .5;
+    margin-bottom: 10px;
+}
+
+.diagnostic strong {
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.failed {
+    color: #ff5555;
+}
+
+.warning-state {
+    color: #ffad55;
+}
+
+.console {
+    margin-top: 25px;
+    padding: 20px;
+    border: 1px solid rgba(120,240,240,.12);
+    background: rgba(0,0,0,.35);
+    height: 190px;
+    overflow: hidden;
+}
+
+.console p {
+    margin: 8px 0;
+    font-size: 11px;
+    opacity: .55;
+}
+
+.console p span {
+    margin-right: 20px;
+    opacity: .5;
+}
+
+.console-warning {
+    color: #ff5555;
+    opacity: .9 !important;
+}
+
+.bottom-status {
+    margin-top: 25px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.indicator {
+    color: #ff5555;
+}
+
+.indicator i {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #ff3333;
+    margin-right: 8px;
+    box-shadow: 0 0 12px #ff3333;
+    animation: pulse 1.5s infinite;
+}
+
+.waiting {
+    opacity: .5;
+}
+
+.waiting b {
+    animation: blink 1s infinite;
+}
+
+.scan-header {
+    text-align: center;
+    letter-spacing: 5px;
+    font-size: 13px;
+    margin-bottom: 30px;
+}
+
+.scan-frame {
+    width: 330px;
+    height: 330px;
+    margin: auto;
+    position: relative;
+    border: 1px solid rgba(130,240,240,.25);
+}
+
+.corner {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-color: #aaffff;
+    border-style: solid;
+}
+
+.top-left {
+    top: -2px;
+    left: -2px;
+    border-width: 2px 0 0 2px;
+}
+
+.top-right {
+    top: -2px;
+    right: -2px;
+    border-width: 2px 2px 0 0;
+}
+
+.bottom-left {
+    bottom: -2px;
+    left: -2px;
+    border-width: 0 0 2px 2px;
+}
+
+.bottom-right {
+    bottom: -2px;
+    right: -2px;
+    border-width: 0 2px 2px 0;
+}
+
+.scan-object {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.scan-ring {
+    width: 120px;
+    height: 120px;
+    border: 1px solid #8fffff;
+    border-radius: 50%;
+    animation: scanRotate 3s linear infinite;
+}
+
+.ring-two {
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    opacity: .25;
+    animation-direction: reverse;
+}
+
+.scan-cross {
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    border-left: 1px solid rgba(150,255,255,.3);
+    border-right: 1px solid rgba(150,255,255,.3);
+}
+
+.scan-beam {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: #aaffff;
+    box-shadow: 0 0 15px #aaffff;
+    top: 0;
+    animation: scanBeam 2s linear infinite;
+}
+
+.scan-frame + h2 {
+    text-align: center;
+    margin-top: 30px;
+    letter-spacing: 5px;
+}
+
+#scanMessage {
+    text-align: center;
+    font-size: 11px;
+    opacity: .6;
+    letter-spacing: 2px;
+}
+
+.progress-track {
+    width: 500px;
+    max-width: 90%;
+    height: 5px;
+    margin: 25px auto 10px;
+    background: rgba(255,255,255,.08);
+}
+
+#scanProgress {
+    height: 100%;
+    width: 0%;
+    background: #baffff;
+    box-shadow: 0 0 15px #aaffff;
+}
+
+#scanPercent {
+    text-align: center;
+    font-size: 11px;
+}
+
+.unlock-symbol {
+    font-size: 90px;
+    text-align: center;
+    animation: unlockPulse 1s infinite;
+}
+
+.access-label {
+    text-align: center;
+    letter-spacing: 6px;
+    font-size: 11px;
+    opacity: .5;
+}
+
+.access-title {
+    text-align: center;
+    font-size: 55px;
+    letter-spacing: 8px;
+    margin: 20px 0;
+    animation: accessFlash .8s infinite;
+}
+
+.access-line {
+    height: 1px;
+    width: 450px;
+    max-width: 80%;
+    margin: auto;
+    background: #aaffff;
+    box-shadow: 0 0 20px #aaffff;
+}
+
+#unlockMessage {
+    text-align: center;
+    letter-spacing: 3px;
+    margin-top: 25px;
+}
+
+.coordinates {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-top: 50px;
+    font-size: 10px;
+    letter-spacing: 4px;
+    opacity: .4;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 55px;
+    padding: 0 35px;
+    border-top: 1px solid rgba(100,220,220,.15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 9px;
+    letter-spacing: 1px;
+    opacity: .45;
+}
+
+footer b {
+    color: #75ffff;
+}
+
+.secret-interface {
+    background:
+        radial-gradient(
+            circle at center,
+            #160404 0%,
+            #080202 45%,
+            #010101 100%
+        );
+}
+
+.secret-interface .topbar {
+    border-color: rgba(255,60,60,.2);
+}
+
+.secret-interface main {
+    text-align: center;
+}
+
+#secretLoading p {
+    letter-spacing: 4px;
+    font-size: 11px;
+    opacity: .6;
+}
+
+.loading-symbol {
+    font-size: 70px;
+    animation: spin 2s linear infinite;
+}
+
+.secret-loader {
+    width: 300px;
+    height: 3px;
+    background: rgba(255,255,255,.1);
+    margin: 30px auto;
+}
+
+.secret-loader div {
+    height: 100%;
+    width: 0%;
+    background: #ff5555;
+    box-shadow: 0 0 15px #ff3333;
+    animation: loading 3s linear forwards;
+}
+
+.classified {
+    font-size: 10px;
+    letter-spacing: 5px;
+    color: #ff5555;
+    opacity: .7;
+}
+
+.secret-warning {
+    font-size: 50px;
+    color: #ff3333;
+    margin: 25px 0;
+    animation: pulse 1s infinite;
+}
+
+#secretContent h1 {
+    font-size: 50px;
+    letter-spacing: 8px;
+    margin: 0;
+}
+
+.secret-line {
+    width: 500px;
+    max-width: 80%;
+    height: 1px;
+    background: #ff5555;
+    box-shadow: 0 0 15px #ff3333;
+    margin: 25px auto;
+}
+
+.secret-message {
+    font-size: 11px;
+    letter-spacing: 3px;
+    opacity: .65;
+}
+
+.port-panel {
+    width: 400px;
+    max-width: 90%;
+    margin: 45px auto 25px;
+    padding: 25px;
+    border: 1px solid rgba(255,80,80,.5);
+    background: rgba(0,0,0,.4);
+    box-shadow: 0 0 40px rgba(255,0,0,.08);
+}
+
+.port-panel span {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 5px;
+    opacity: .6;
+}
+
+.port-panel strong {
+    display: block;
+    margin-top: 15px;
+    font-size: 70px;
+    letter-spacing: 10px;
+    color: #ff6666;
+    text-shadow: 0 0 20px rgba(255,50,50,.7);
+}
+
+.remember {
+    color: #ff5555;
+    letter-spacing: 4px;
+    font-size: 10px;
+}
+
+.apex-message {
+    margin-top: 45px;
+    font-size: 10px;
+    letter-spacing: 6px;
+    opacity: .35;
+}
+
+@keyframes glitch {
+    0%, 90%, 100% {
+        transform: translate(0);
+    }
+
+    91% {
+        transform: translate(-5px, 2px);
+    }
+
+    92% {
+        transform: translate(5px, -2px);
+    }
+
+    93% {
+        transform: translate(-2px, 0);
+    }
+}
+
+@keyframes pulse {
+    50% {
+        opacity: .35;
+    }
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+@keyframes scanRotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes scanBeam {
+    0% {
+        top: 0;
+    }
+
+    50% {
+        top: 100%;
+    }
+
+    100% {
+        top: 0;
+    }
+}
+
+@keyframes unlockPulse {
+    50% {
+        transform: scale(1.15);
+        opacity: .5;
+    }
+}
+
+@keyframes accessFlash {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .5;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes loading {
+    to {
+        width: 100%;
+    }
+}
+#bootSequence,
+#breachSequence,
+#revealSequence {
+    text-align: center;
+    width: 100%;
+}
+
+.boot-symbol {
+    font-size: 80px;
+    opacity: .8;
+    animation: bootPulse 1s infinite;
+}
+
+#bootText {
+    margin-top: 25px;
+    font-size: 14px;
+    letter-spacing: 5px;
+    animation: textFlicker .8s infinite;
+}
+
+.boot-lines {
+    margin-top: 35px;
+    font-size: 10px;
+    line-height: 2.5;
+    opacity: .4;
+}
+
+.boot-lines p {
+    margin: 0;
+}
+
+.breach-warning {
+    font-size: 45px;
+    letter-spacing: 8px;
+    color: #ff4545;
+    animation: breachFlash .35s infinite;
+}
+
+.red-lines {
+    width: 70%;
+    height: 2px;
+    margin: 30px auto;
+    background: #ff4545;
+    box-shadow:
+        0 0 10px #ff3333,
+        0 0 30px rgba(255,0,0,.5);
+    animation: lineExpand 1s ease-out forwards;
+}
+
+.breach-text {
+    font-size: 11px;
+    letter-spacing: 3px;
+    line-height: 3;
+    color: #ff8888;
+}
+
+.breach-text p {
+    margin: 0;
+    animation: breachText .5s forwards;
+}
+
+.breach-text p:nth-child(2) {
+    animation-delay: .3s;
+}
+
+.breach-text p:nth-child(3) {
+    animation-delay: .6s;
+}
+
+.apex-symbol {
+    font-size: 70px;
+    color: #ff4444;
+    text-shadow:
+        0 0 15px #ff2222,
+        0 0 40px rgba(255,0,0,.5);
+    animation: apexPulse 1.2s infinite;
+    margin-bottom: 20px;
+}
+
+#revealSequence h1 {
+    font-size: 52px;
+    letter-spacing: 9px;
+    margin: 0;
+    animation: revealTitle 1s ease-out;
+}
+
+#revealSequence .message {
+    font-size: 11px;
+    letter-spacing: 3px;
+    opacity: .65;
+}
+
+.port-panel {
+    width: 420px;
+    max-width: 90%;
+    margin: 40px auto 20px;
+    padding: 25px;
+    border: 1px solid rgba(255,70,70,.5);
+    background: rgba(0,0,0,.5);
+    animation: portAppear 1.2s ease-out;
+}
+
+.port-panel span {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 5px;
+    opacity: .6;
+}
+
+.port-panel strong {
+    display: block;
+    margin-top: 12px;
+    font-size: 72px;
+    letter-spacing: 12px;
+    color: #ff5555;
+    text-shadow:
+        0 0 15px #ff2222,
+        0 0 40px rgba(255,0,0,.4);
+}
+
+.remember {
+    color: #ff5555;
+    font-size: 10px;
+    letter-spacing: 5px;
+}
+
+.apex-message {
+    margin-top: 40px;
+    font-size: 10px;
+    letter-spacing: 7px;
+    opacity: .35;
+    animation: watching 3s infinite;
+}
+
+@keyframes bootPulse {
+    50% {
+        opacity: .2;
+        transform: scale(.9);
+    }
+}
+
+@keyframes textFlicker {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .4;
+    }
+}
+
+@keyframes breachFlash {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .25;
+    }
+}
+
+@keyframes lineExpand {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 70%;
+    }
+}
+
+@keyframes breachText {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes apexPulse {
+    50% {
+        transform: scale(1.15);
+        opacity: .5;
+    }
+}
+
+@keyframes revealTitle {
+    from {
+        opacity: 0;
+        letter-spacing: 25px;
+    }
+
+    to {
+        opacity: 1;
+        letter-spacing: 9px;
+    }
+}
+
+@keyframes portAppear {
+    from {
+        opacity: 0;
+        transform: scale(.7);
+        filter: blur(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+    }
+}
+
+@keyframes watching {
+    0%, 100% {
+        opacity: .2;
+    }
+
+    50% {
+        opacity: .7;
+    }
+}
